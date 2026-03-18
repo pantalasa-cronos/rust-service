@@ -1,0 +1,4 @@
+[package]
+name = "scheduler-lib"
+version = "2.1.0"
+edition = "2021"

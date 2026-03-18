@@ -7,6 +7,9 @@ rust-version = "1.70.0"
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+scheduler-lib = { path = "vendor-libs/scheduler-lib" }
+date-utils = { path = "vendor-libs/date-utils" }
+crypto-helper = { path = "vendor-libs/crypto-helper" }
 
 [dev-dependencies]
 assert_cmd = "2.0"
