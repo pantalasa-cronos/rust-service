@@ -16,3 +16,12 @@ jobs:
         run: cargo test
       - name: Clippy
         run: cargo clippy -- -D warnings
+      - name: Build Docker image
+        run: |
+          docker build \
+            --label git_sha=${{ github.sha }} \
+            --label build_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+            --label version=${{ github.ref_name }} \
+            --label repository=${{ github.repository }} \
+            -t rust-service:${{ github.sha }} \
+            .
