@@ -16,4 +16,4 @@ regex = "1.5.4"
 chrono = "0.4.19"
 
 [dev-dependencies]
-assert_cmd = "2.0"
+assert_cmd = "2.0.14"
