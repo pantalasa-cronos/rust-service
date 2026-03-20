@@ -1,0 +1,30 @@
+name: Release Gate
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  ok_release:
+    runs-on: cronos
+    steps:
+      - name: Install Lunar CLI
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -sSfL https://github.com/earthly/lunar-dist/releases/latest/download/lunar-linux-amd64 -o "$HOME/.local/bin/lunar"
+          chmod +x "$HOME/.local/bin/lunar"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Fake CD release gate
+        env:
+          LUNAR_HUB_HOST: cronos.demo.earthly.dev
+          LUNAR_HUB_TOKEN: ${{ secrets.LUNAR_HUB_TOKEN }}
+        run: |
+          lunar policy ok-release github.com/${{ github.repository }} ${{ github.sha }}
+
+  release:
+    needs: ok_release
+    runs-on: cronos
+    steps:
+      - name: Release
+        run: |
+          echo "Releasing ${{ github.sha }}..."

@@ -1,15 +1,24 @@
-name: CI
+name: GH-Actions
 on:
   push:
-    branches: [main]
+    branches:
+      - "**"
   pull_request:
-    branches: [main]
+    branches:
+      - "**"
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTUP_TOOLCHAIN: 1.85.0
 
 jobs:
-  test:
+  rust_service_build:
     runs-on: cronos
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          clean: true
       - name: Install dependencies
         run: apt-get update && apt-get install -y build-essential pkg-config libssl-dev
       - name: Install Rust
