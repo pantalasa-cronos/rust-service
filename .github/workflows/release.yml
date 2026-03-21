@@ -19,10 +19,7 @@ jobs:
       - name: Install Lunar CLI (from branch build)
         run: |
           mkdir -p "$HOME/.local/bin"
-          docker pull earthly/lunar-hub:brandon-ok-release-check-details
-          docker create --name lunar-cli-extract earthly/lunar-hub:brandon-ok-release-check-details
-          docker cp lunar-cli-extract:/bin/lunar "$HOME/.local/bin/lunar"
-          docker rm lunar-cli-extract
+          curl -sSfL https://github.com/pantalasa-cronos/rust-service/releases/download/test-cli-build/lunar-linux-amd64 -o "$HOME/.local/bin/lunar"
           chmod +x "$HOME/.local/bin/lunar"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
