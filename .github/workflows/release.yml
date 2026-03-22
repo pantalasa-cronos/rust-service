@@ -1,9 +1,10 @@
 name: Release Gate
 on:
-  workflow_run:
-    workflows: ["GH-Actions"]
-    types: [completed]
   workflow_dispatch:
+    inputs:
+      sha:
+        description: "Git SHA to check for release (defaults to HEAD of selected branch)"
+        required: false
 
 env:
   LUNAR_HUB_HOST: cronos.demo.earthly.dev
@@ -11,11 +12,11 @@ env:
   LUNAR_HUB_HTTP_PORT: "443"
   LUNAR_HUB_TOKEN: ${{ secrets.LUNAR_HUB_TOKEN }}
   COMPONENT: github.com/${{ github.repository }}
+  RELEASE_SHA: ${{ inputs.sha || github.sha }}
 
 jobs:
   ok_release:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Install Lunar CLI (from branch build)
         run: |
@@ -24,11 +25,6 @@ jobs:
           chmod +x "$HOME/.local/bin/lunar"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      - name: Wait for collectors to finish
-        run: |
-          echo "Waiting 120s for Lunar collectors to process this commit..."
-          sleep 120
-
       - name: Check release policies
         run: |
           echo "=========================================="
@@ -36,10 +32,10 @@ jobs:
           echo "=========================================="
           echo ""
           echo "Component: $COMPONENT"
-          echo "Commit:    ${{ github.event.workflow_run.head_sha || github.sha }}"
+          echo "Commit:    $RELEASE_SHA"
           echo ""
           echo "Running release gate check..."
-          if lunar policy ok-release "$COMPONENT" "${{ github.event.workflow_run.head_sha || github.sha }}"; then
+          if lunar policy ok-release "$COMPONENT" "$RELEASE_SHA"; then
             echo ""
             echo "✅ All release policies passed — proceeding with deploy."
           else
@@ -58,6 +54,6 @@ jobs:
     steps:
       - name: Release
         run: |
-          echo "🚀 Deploying ${{ github.repository }} @ ${{ github.event.workflow_run.head_sha || github.sha }}..."
+          echo "🚀 Deploying ${{ github.repository }} @ $RELEASE_SHA..."
           sleep 2
           echo "Deploy complete."
