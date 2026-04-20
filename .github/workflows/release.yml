@@ -16,7 +16,7 @@ env:
 
 jobs:
   ok_release:
-    runs-on: ubuntu-latest
+    runs-on: cronos
     steps:
       - name: Install Lunar CLI (from branch build)
         run: |
@@ -50,7 +50,7 @@ jobs:
 
   release:
     needs: ok_release
-    runs-on: ubuntu-latest
+    runs-on: cronos
     steps:
       - name: Release
         run: |

@@ -47,7 +47,7 @@ jobs:
   ok_release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: rust_service_build
-    runs-on: ubuntu-latest
+    runs-on: cronos
     env:
       LUNAR_HUB_HOST: cronos.demo.earthly.dev
       LUNAR_HUB_GRPC_PORT: "443"
@@ -89,7 +89,7 @@ jobs:
   release:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: ok_release
-    runs-on: ubuntu-latest
+    runs-on: cronos
     steps:
       - name: Release
         run: |
