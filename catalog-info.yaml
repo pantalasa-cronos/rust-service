@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: rust-service
+  description: Rust service (cronos demo)
+  annotations:
+    # ENG-1014 link-pull demo: predeclared mapping to this service's ArgoCD
+    # Application, so the argocd-pull collector can get-json the GitOps component
+    # and materialize .cd.gitops here without auto-correlation.
+    lunar.earthly.dev/gitops-component: github.com/pantalasa-cronos/gitops
+    lunar.earthly.dev/argocd-application: rust-service
+spec:
+  type: service
+  lifecycle: production
+  owner: platform
