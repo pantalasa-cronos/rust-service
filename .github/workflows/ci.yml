@@ -52,6 +52,16 @@ jobs:
       COMPONENT: github.com/${{ github.repository }}
       RELEASE_SHA: ${{ github.sha }}
     steps:
+      # REPRO TIMING: let CI + server-side code collection fully settle while
+      # this run stays in_progress, so ok-release runs with NO further collection
+      # to re-trigger a fresh eval. That is the deadlock condition (Tanner:
+      # "policies finished ~25s before release"). If ok-release starts while
+      # collection is still flowing, the in-flight PolicyRunIntents re-eval with
+      # is_ok_waiter=true and it self-heals instead of deadlocking.
+      - name: Let collection settle before the gate
+        run: |
+          echo "Waiting for collection to settle before the release gate..."
+          sleep 210
       - name: Check release policies
         run: |
           echo "=========================================="
