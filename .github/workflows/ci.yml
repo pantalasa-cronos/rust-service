@@ -49,20 +49,9 @@ jobs:
     needs: rust_service_build
     runs-on: cronos
     env:
-      LUNAR_HUB_HOST: cronos.demo.earthly.dev
-      LUNAR_HUB_GRPC_PORT: "443"
-      LUNAR_HUB_HTTP_PORT: "443"
-      LUNAR_HUB_TOKEN: ${{ secrets.LUNAR_HUB_TOKEN }}
       COMPONENT: github.com/${{ github.repository }}
       RELEASE_SHA: ${{ github.sha }}
     steps:
-      - name: Install Lunar CLI
-        run: |
-          mkdir -p "$HOME/.local/bin"
-          curl -sSfL https://github.com/pantalasa-cronos/rust-service/releases/download/test-cli-build/lunar-linux-amd64 -o "$HOME/.local/bin/lunar"
-          chmod +x "$HOME/.local/bin/lunar"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
       - name: Check release policies
         run: |
           echo "=========================================="
