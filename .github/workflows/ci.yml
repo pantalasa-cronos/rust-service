@@ -49,19 +49,20 @@ jobs:
     needs: rust_service_build
     runs-on: cronos
     env:
+      LUNAR_HUB_HOST: cronos.demo.earthly.dev
+      LUNAR_HUB_GRPC_PORT: "443"
+      LUNAR_HUB_HTTP_PORT: "443"
+      LUNAR_HUB_TOKEN: ${{ secrets.LUNAR_HUB_TOKEN }}
       COMPONENT: github.com/${{ github.repository }}
       RELEASE_SHA: ${{ github.sha }}
     steps:
-      # REPRO TIMING: let CI + server-side code collection fully settle while
-      # this run stays in_progress, so ok-release runs with NO further collection
-      # to re-trigger a fresh eval. That is the deadlock condition (Tanner:
-      # "policies finished ~25s before release"). If ok-release starts while
-      # collection is still flowing, the in-flight PolicyRunIntents re-eval with
-      # is_ok_waiter=true and it self-heals instead of deadlocking.
-      - name: Let collection settle before the gate
+      - name: Install Lunar CLI
         run: |
-          echo "Waiting for collection to settle before the release gate..."
-          sleep 210
+          mkdir -p "$HOME/.local/bin"
+          curl -sSfL https://github.com/pantalasa-cronos/rust-service/releases/download/test-cli-build/lunar-linux-amd64 -o "$HOME/.local/bin/lunar"
+          chmod +x "$HOME/.local/bin/lunar"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
       - name: Check release policies
         run: |
           echo "=========================================="
