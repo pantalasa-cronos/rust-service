@@ -60,8 +60,8 @@ jobs:
       # is_ok_waiter=true and it self-heals instead of deadlocking.
       - name: Let collection settle before the gate
         run: |
-          echo "Waiting for collection to settle before the release gate..."
-          sleep 210
+          echo "Waiting 18min for the slow rust SCA code collector to fully settle, so ok-release faces a PURE workflow deadlock (isolates the fix from collector re-trigger)"
+          sleep 1080
       - name: Check release policies
         run: |
           echo "=========================================="
