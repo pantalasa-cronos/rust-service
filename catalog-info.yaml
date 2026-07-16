@@ -13,7 +13,3 @@ spec:
   type: service
   lifecycle: production
   owner: platform
-  # [ENG-1126 RI E2E — lunar-lib#234] deliberately-bogus system so the backstage
-  # collector's referential-integrity lookup returns a definitive 404 and
-  # system-exists fails. Revert this line after the test.
-  system: lunar-ri-e2e-missing
