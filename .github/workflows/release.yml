@@ -18,10 +18,10 @@ jobs:
   ok_release:
     runs-on: cronos
     steps:
-      - name: Install Lunar CLI (from branch build)
+      - name: Install Lunar CLI (latest from lunar-dist)
         run: |
           mkdir -p "$HOME/.local/bin"
-          curl -sSfL https://github.com/pantalasa-cronos/rust-service/releases/download/test-cli-build/lunar-linux-amd64 -o "$HOME/.local/bin/lunar"
+          curl -sSfL https://github.com/earthly/lunar-dist/releases/latest/download/lunar-linux-amd64 -o "$HOME/.local/bin/lunar"
           chmod +x "$HOME/.local/bin/lunar"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
